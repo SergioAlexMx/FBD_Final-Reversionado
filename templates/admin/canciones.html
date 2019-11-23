@@ -1,0 +1,81 @@
+{% extends "/admin/layout_admin.html" %}
+{% block content %}
+    <main role="main" class="col-md-9 ml-sm-auto col-lg-10 pt-3 px-4">
+        {% from "macro.html" import render_field %}
+        <div class="jumbotron">
+            <h1 class="display-4">Agregar Cancion</h1>
+            <p class="lead">Ingrese la información correspondiente en los siguientes campos</p>
+            {% with messages = get_flashed_messages() %}
+                {% if messages %}
+                    {% for message in messages %}
+                        <div class="alert alert-primary" role="alert">{{ message }}</div>
+                    {% endfor %}
+
+                {% endif %}
+            {% endwith %}
+            <form method="POST" enctype="multipart/form-data">
+                {{ render_field(form.hidden_tag) }}
+                {{ render_field(form.nombre, class="form-control") }}
+
+                <p1>Genero</p1>
+                <div class="form-group col-md">
+                    <select name="Genero" class="form-control">
+                        {% for a in  gen_data %}
+                            <option value="{{ a.0 }}">{{ a.1 }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <p>Album</p>
+                <div class="form-group col-md">
+                    <select name="Album" class="form-control">
+                        {% for a in  alb_data %}
+                            <option value="{{ a.0 }}">{{ a.1 }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                {{ render_field(form.precio, class="form-control") }}
+                {{ render_field(form.submit, class="btn btn-primary") }}
+                <hr>
+                <table class="table table-striped">
+                    <thead class="thead-dark">
+                    <tr>
+                        <th scope="col">Id</th>
+                        <th scope="col">Genero</th>
+                        <th scope="col">Album</th>
+                        <th scope="col">Nombre</th>
+                        <th scope="col">Precio</th>
+                        <th scope="col">Opciones</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for cancion in can %}
+                        <tr>
+                            <th scope="row">{{ cancion.0 }}</th>
+                            {% for a in  gen_data %}
+                                {% if a.0 == cancion.1 %}
+                                    <td>{{ a.1 }}</td>
+                                {% endif %}
+                            {% endfor %}
+
+                            {% for a in  alb_data %}
+                                {% if a.0 == cancion.2 %}
+                                    <td>{{ a.1 }}</td>
+                                {% endif %}
+                            {% endfor %}
+                            <td>{{ cancion.3 }}</td>
+                            <td>{{ cancion.4 }}</td>
+                            <td>
+                                <a class="btn btn-warning" href="/admin/edit_cancion/{{ cancion.0 }}" role="button">Editar</a>
+                                <a class="btn btn-danger" href="/admin/delete_cancion/{{ cancion.0 }}"
+                                   role="button">Eliminar</a>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+                </table>
+            </form>
+        </div>
+    </main>
+{% endblock %}

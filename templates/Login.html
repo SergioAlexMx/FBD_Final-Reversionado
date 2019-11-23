@@ -1,0 +1,42 @@
+{% extends "layout_login.html" %}
+{% block content %}
+    <form class="form-signin" method="post" role="form">
+        {{ form.csrf }}
+        <!---------------------------------------------------------------------------->
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for message in messages %}
+                    {% if "no" not in message[1] %}
+                        <div class="alert alert-info">
+                            <strong>Success! </strong> {{ message[1] }}
+                        </div>
+                    {% endif %}
+                    {% if "no" in message[1] %}
+                        <div class="alert alert-danger">
+                            <strong>Error: </strong> {{ message[1] }}
+                        </div>
+                    {% endif %}
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+        <!------------------------------------------------------------------------------>
+        <h1 class="h1 mb-3 font-weight-normal">¡Bienvenido!</h1>
+        <h1 class="h3 mb-3 font-weight-normal">Porfavor, inicie sesión</h1>
+        <label for="inputEmail" class="sr-only">Correo electrónico</label>
+        <input type="email" id="email" name="email" class="form-control" placeholder="Correo electronico" required
+               autofocus>
+
+        <label for="inputPassword" class="sr-only">Password</label>
+        <input type="password" id="password" name="password" class="form-control" placeholder="Contraseña" required>
+
+        <div class="checkbox mb-3">
+            <label>
+                <input type="checkbox" value="remember-me" name="remember_me" id="remember_me"> Recuerdame
+            </label>
+        </div>
+        <button class="btn btn-lg btn-primary btn-block" type="submit">Iniciar sesión</button>
+        <hr>
+        <a href="/create_account" class="btn btn-lg btn-primary btn-block">Crear nueva cuenta</a>
+        <br>
+    </form>
+{% endblock %}

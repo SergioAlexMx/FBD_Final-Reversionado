@@ -1,0 +1,51 @@
+{% extends "/admin/layout_admin.html" %}
+{% block content %}
+    <main role="main" class="col-md-9 ml-sm-auto col-lg-10 pt-3 px-4">
+        {% from "macro.html" import render_field %}
+
+        <div class="jumbotron">
+            <h1 class="display-4">Agregar genero</h1>
+            <p class="lead">Ingrese la inforacion correspondiente en los siguientes campos</p>
+            {% with messages = get_flashed_messages() %}
+                {% if messages %}
+
+                    {% for message in messages %}
+                        <div class="alert alert-primary" role="alert">{{ message }}</div>
+                    {% endfor %}
+
+                {% endif %}
+            {% endwith %}
+
+            <form method="POST" enctype="multipart/form-data">
+                {{ render_field(form.hidden_tag) }}
+                {{ render_field(form.genre, class="form-control") }}
+                {{ render_field(form.submit, class="btn btn-primary") }}
+            </form>
+
+            <hr>
+
+            <table class="table table-striped">
+                <thead class="thead-dark">
+                <tr>
+                    <th scope="col">Id</th>
+                    <th scope="col">Nombre del genero</th>
+                    <th scope="col">Opciones</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for g in gen %}
+                    <tr>
+                        <th scope="row">{{ g.0 }}</th>
+                        <td>{{ g.1 }}</td>
+                        <td>
+                            <a class="btn btn-warning" href="/admin/edit_genero/{{ g.0 }}" role="button">Editar</a>
+                            <a class="btn btn-danger" href="/admin/delete_genero/{{ g.0 }}" role="button">Eliminar</a>
+                        </td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+
+        </div>
+    </main>
+{% endblock %}

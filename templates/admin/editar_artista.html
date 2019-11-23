@@ -1,0 +1,30 @@
+{% extends "/admin/layout_admin.html" %}
+{% block content %}
+    <main role="main" class="col-md-9 ml-sm-auto col-lg-10 pt-3 px-4">
+        {% from "macro.html" import render_field %}
+        <div class="jumbotron">
+            {% with messages = get_flashed_messages() %}
+                {% if messages %}
+                    {% for message in messages %}
+                        <div class="alert alert-primary" role="alert">{{ message }}</div>
+                    {% endfor %}
+                {% endif %}
+            {% endwith %}
+            <h1 class="display-4">Editar artista</h1>
+            <p class="lead">Ingrese la información correspondiente en los siguientes campos</p>
+            <form method="POST" enctype="multipart/form-data">
+                {% for a in data %}
+                    {{ render_field(form.hidden_tag) }}
+                    {{ render_field(form.nombre, class="form-control", value=a.1) }}
+                    {{ render_field(form.bio, class="form-control", rows=4) }}
+                    {{ render_field(form.img, class="btn btn-primary") }}
+                    {{ render_field(form.submit, class="btn btn-primary") }}
+                    <hr>
+                    <p class="lead">Imagen cargada previamente</p>
+                    <img src="data:;base64,{{ base64.b64encode(a.3.read()).decode("utf-8") }}" class="img-fluid"
+                         alt="Responsive image"/>
+                {% endfor %}
+            </form>
+        </div>
+    </main>
+{% endblock %}
