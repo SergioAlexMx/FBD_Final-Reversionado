@@ -40,7 +40,9 @@
 
         <button class="btn btn-lg btn-primary btn-block" type="submit">Crear cuenta</button>
         <hr>
-        <a href="/login" class="btn btn-lg btn-primary btn-block">Iniciar sesión</a>
+        {% if flag %}
+            <a href="/login" class="btn btn-lg btn-primary btn-block">Iniciar sesión</a>
+        {% endif %}
         <br>
     </form>
 {% endblock %}

@@ -1,8 +1,9 @@
 {% extends "/admin/layout_admin.html" %}
-{% set active_page = "artistas" %}
+{% set active_page = "usuarios" %}
+
 {% block content %}
     <main role="main" class="col-md-9 ml-sm-auto col-lg-10 pt-3 px-4">
-        {% from "macro.html" import render_field %}
+        <!--MESSAGE------------------------------------------------------------------------------->
         <div class="jumbotron">
             {% with messages = get_flashed_messages() %}
                 {% if messages %}
@@ -11,21 +12,22 @@
                     {% endfor %}
                 {% endif %}
             {% endwith %}
-            <h1 class="display-4">Agregar artista</h1>
-            <p class="lead">Ingrese la inforacion correspondiente en los siguientes campos</p>
-            <form method="POST" enctype="multipart/form-data">
-                {{ render_field(form.hidden_tag) }}
-                {{ render_field(form.nombre, class="form-control") }}
-                {{ render_field(form.bio, class="form-control", rows=4) }}
-                {{ render_field(form.img, class="btn btn-primary") }}
-                {{ render_field(form.submit, class="btn btn-primary") }}
-            </form>
+
+            <h1 class="display-4">Usuarios</h1>
+
+            <hr class="my-4">
+            <a href="/admin/create_account" class="btn btn-success">Añadir usuarios</a>
+            <br>
+            <br>
             <table class="table table-striped">
                 <thead class="thead-dark">
                 <tr>
                     <th scope="col">Id</th>
                     <th scope="col">Nombre</th>
-                    <th scope="col">Biografía</th>
+                    <th scope="col">Apellidos</th>
+                    <th scope="col">Correo</th>
+                    <th scope="col">Contraseña</th>
+                    <th scope="col">Administrador</th>
                     <th scope="col">Opciones</th>
                 </tr>
                 </thead>
@@ -35,9 +37,12 @@
                         <th scope="row">{{ g.0 }}</th>
                         <td>{{ g.1 }}</td>
                         <td>{{ g.2 }}</td>
+                        <td>{{ g.3 }}</td>
+                        <td>{{ g.4 }}</td>
+                        <td>{% if g.5 == '1' %} Sí {% else %} No {% endif %}</td>
                         <td>
-                            <a class="btn btn-warning" href="/admin/edit_artista/{{ g.0 }}" role="button">Editar</a>
-                            <a class="btn btn-danger" href="/admin/delete_artista/{{ g.0 }}" role="button">Eliminar</a>
+                            <a class="btn btn-warning" href="/admin/edit_usuario/{{ g.0 }}" role="button">Editar</a>
+                            <a class="btn btn-danger" href="/admin/delete_usuario/{{ g.0 }}" role="button">Eliminar</a>
                         </td>
                     </tr>
                 {% endfor %}

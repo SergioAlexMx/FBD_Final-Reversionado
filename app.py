@@ -11,7 +11,7 @@ import cx_Oracle
 import forms
 from forms import LoginForm, FormUsuarios
 from static.conversorBinario import convertToBinaryData
-from static.users_load import get_user, users
+from static.users_load import get_user, users, load_users
 
 app = Flask(__name__)
 login_manager = LoginManager(app)  # Variable donde se almacenaran los parametros del usuario logueado
@@ -383,17 +383,44 @@ def create_account():
             try:
                 cur = connection.cursor()
                 cur.execute(
-                    "INSERT INTO usuarios(NOMBRE, APELLIDO, CORREO, PASSWORD, ES_ACTIVO) VALUES ('%s','%s','%s','%s','%s')" % (
+                    "INSERT INTO usuarios(NOMBRE, APELLIDO, CORREO, PASSWORD, ES_ADMIN) VALUES ('%s','%s','%s','%s','%s')" % (
                         nombre, apellidos, email, password, '0'))
                 connection.commit()
                 cur.close()
                 flash("Usuario creado exitosamente, ahora inicie sesión")
                 return redirect("/login")
             except:
-                flash("Error - Hubo un error al guardar los datos, comuniquelo con el administrador")
+                flash("Error - No se pudieron almacenar los datos, comuniquelo con el administrador")
                 print("Hubo error")
                 return redirect("/create_account")
-    return render_template("create_account.html", form=form)
+    return render_template("create_account.html", form=form, flag=True)
+
+
+@app.route("/admin/create_account", methods=['GET', 'POST'])
+def create_account_a():
+    form = FormUsuarios(request.form)
+    if current_user.is_authenticated:
+        if request.method == "POST":
+            nombre = request.form["nombre"]
+            apellidos = request.form["apellidos"]
+            email = request.form["email"]
+            password = request.form["password"]
+            es_admin = False
+            print(form.validate())
+            try:
+                cur = connection.cursor()
+                cur.execute(
+                    "INSERT INTO usuarios(NOMBRE, APELLIDO, CORREO, PASSWORD, ES_ADMIN) VALUES ('%s','%s','%s','%s','%s')" % (
+                        nombre, apellidos, email, password, '0'))
+                connection.commit()
+                cur.close()
+                flash("Usuario creado exitosamente")
+                return redirect("/admin/usuarios")
+            except:
+                flash("Error - No se pudieron almacenar los datos, comuniquelo con el administrador")
+                print("Hubo error")
+                return redirect("/create_account")
+    return render_template("create_account.html", form=form, flag=False)
 
 
 @app.route('/login', methods=['GET', 'POST'])
@@ -423,9 +450,30 @@ def load_user(user_id):
 
 
 @app.route('/logout')
+@login_required
 def logout():
     logout_user()
     return redirect('/')
+
+
+@app.route('/admin/usuarios', methods=['POST', 'GET'])
+@login_required
+def usuarios():
+    from static.get_db_data import get_db_users
+    users = get_db_users()
+    return render_template("/admin/usuarios.html", data=users)
+
+
+@app.route('/admin/delete_usuario/<string:id>')
+@login_required
+def delete_usuario(id):
+    if current_user.is_admin:
+        cur = connection.cursor()
+        cur.execute("DELETE FROM USUARIOS WHERE ID_USUARIO = :1", (id,))
+        connection.commit()
+        cur.close()
+        flash("Artista eliminado exitosamente")
+        return redirect('/admin/usuarios')
 
 
 if __name__ == '__main__':

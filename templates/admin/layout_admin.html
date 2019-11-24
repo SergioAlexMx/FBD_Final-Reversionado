@@ -30,53 +30,36 @@
     </ul>
 </nav>
 
+{% set nav_bar = [
+        ('/', 'index', 'Inicio', 'home'),
+        ('/admin/albums', 'albums', 'Albums', 'disc'),
+        ('/admin/canciones', 'canciones', 'Canciones', 'music'),
+        ('/admin/generos', 'generos', 'Generos', 'bookmark'),
+        ('/admin/artistas', 'artistas', 'Artistas','star'),
+        ('/admin/usuarios', 'usuarios', 'Usuarios', 'users')
+        ] %}
+
+{% set active_page = active_page|default('index') -%}
+
 <div class="container-fluid">
     <div class="row">
         <nav class="col-md-2 d-none d-md-block bg-light sidebar">
             <div class="sidebar-sticky">
                 <ul class="nav flex-column">
-                    <li class="nav-item">
-                        <a class="nav-link active" href="#">
-                            <span data-feather="home"></span>
-                            Inicio<span class="sr-only">(current)</span>
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="/admin/albums">
-                            <span data-feather="disc"></span>
-                            Albumes
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="/admin/canciones">
-                            <span data-feather="music"></span>
-                            Canciones
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="/admin/generos">
-                            <span data-feather="bookmark"></span>
-                            Generos
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="/admin/artistas">
-                            <span data-feather="star"></span>
-                            Artistas
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#">
-                            <span data-feather="users"></span>
-                            Usuarios
-                        </a>
-                    </li>
+                    {% for href, id, caption, logo in  nav_bar %}
+                        <li class="nav-item">
+                            <a {% if id== active_page %} class="nav-link active" {% else %} class="nav-link" {% endif %}
+                                                         href="{{ href | e }}">
+                                <span data-feather="{{ logo | e }}"></span>
+                                {{ caption|e }}<span class="sr-only">(current)</span>
+                            </a>
+                        </li>
+                    {% endfor %}
                 </ul>
-
             </div>
         </nav>
         {% block content %}
-                {% endblock %}
+        {% endblock %}
     </div>
 </div>
 
