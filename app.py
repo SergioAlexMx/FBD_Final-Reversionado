@@ -2,16 +2,16 @@ import base64
 import os
 from decimal import Decimal
 
+import cx_Oracle
 from flask import Flask, redirect, request, render_template, flash
 from flask_login import LoginManager, current_user, login_user, logout_user, login_required
 from flask_uploads import UploadSet, configure_uploads, patch_request_class, IMAGES
 from werkzeug.urls import url_parse
-import cx_Oracle
 
 import forms
 from forms import LoginForm, FormUsuarios
 from static.conversorBinario import convertToBinaryData
-from static.users_load import get_user, users, load_users
+from static.users_load import get_user, users
 
 app = Flask(__name__)
 login_manager = LoginManager(app)  # Variable donde se almacenaran los parametros del usuario logueado
