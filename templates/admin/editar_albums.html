@@ -23,9 +23,9 @@
                         <div class="form-group col-md">
                             <select name="artista" class="form-control">
                                 {% for b in art_data %}
-                                    {% if b.0 == a.1  %}
+                                    {% if b.0 == a.1 %}
                                         <option value="{{ b.0 }}" selected="selected">{{ b.1 }}</option>
-                                    {% endif  %}
+                                    {% endif %}
                                     <option value="{{ b.0 }}">{{ b.1 }}</option>
                                 {% endfor %}
                             </select>
@@ -43,7 +43,7 @@
                     </div>
                     <hr>
                     <p>Imagen actual</p>
-                     <img src="data:;base64,{{ base64.b64encode(a.3.read()).decode("utf-8") }}" class="img-fluid"
+                    <img src="data:;base64,{{ base64.b64encode(a.3.read()).decode("utf-8") }}" class="img-fluid"
                          alt="Responsive image"/>
                 {% endfor %}
             </form>

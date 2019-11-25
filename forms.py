@@ -72,4 +72,3 @@ class FormUsuarios(FlaskForm):
                                           validators.length(min=1, max=35, message="Ingrese un apellido valido")])
     email = StringField('Email', validators=[DataRequired()])
     password = PasswordField('Password', validators=[DataRequired()])
-

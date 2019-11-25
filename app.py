@@ -11,7 +11,9 @@ from werkzeug.urls import url_parse
 import forms
 from forms import LoginForm, FormUsuarios
 from static.conversorBinario import convertToBinaryData
+from static.eliminador_acentos import normalize
 from static.users_load import get_user, users
+from static.utileria import vaciar_uploads
 
 app = Flask(__name__)
 login_manager = LoginManager(app)  # Variable donde se almacenaran los parametros del usuario logueado
@@ -39,8 +41,7 @@ def index():
         if current_user.is_admin:
             return render_template("admin/index.html")
         else:
-            return "index normal"
-            print("Hola")
+            return render_template("index.html")
 
 
 @app.route('/admin/edit_cancion/<string:id>', methods=["POST", "GET"])
@@ -169,7 +170,7 @@ def edit_album(id):
         connection.commit()
         cur.close()
         print(data)
-        return render_template("/admin/editar_albums.html", data=data, art_data=art_data, base64=base64, form=form)
+        return render_template("admin/editar_albums.html", data=data, art_data=art_data, base64=base64, form=form)
     else:
         return login_manager.unauthorized()
 
@@ -208,6 +209,7 @@ def albums():
                             (idA, form.title.data, im, p))
                 connection.commit()
                 cur.close()
+                vaciar_uploads()
                 flash("Album creado exitosamente")
                 return redirect('/admin/albums')
             return "OK"
@@ -297,9 +299,9 @@ def artistas():
             # empPicture = open("uploads/%s" % (filename), "rb").read()  # Converts the image to binary
             # empPicture = convertToBinaryData(empPicture)
             empPicture = convertToBinaryData("uploads/%s" % filename)
-
+            print(normalize(form.bio.data))
             cur.execute("INSERT INTO ARTISTAS(NOMBRE, BIOGRAFIA, IMAGEN) VALUES (:2, :3, :4)",
-                        (form.nombre.data, form.bio.data, empPicture))
+                        (form.nombre.data, normalize(form.bio.data), empPicture))
             connection.commit()
             cur.close()
             flash("Artista añadido exitosamente.")
@@ -309,7 +311,7 @@ def artistas():
         cur.execute("SELECT * FROM ARTISTAS")
         data = cur.fetchall()
         cur.close()
-        return render_template("/admin/artistas.html", form=form, data=data)
+        return render_template("admin/artistas.html", form=form, data=data)
     else:
         return login_manager.unauthorized()
 
@@ -456,12 +458,19 @@ def logout():
     return redirect('/')
 
 
+@app.route('/admin/edit_usuario/<string:id>')
+@login_required
+def edit_user(id):
+    return render_template("create_account.html")
+
+
 @app.route('/admin/usuarios', methods=['POST', 'GET'])
 @login_required
 def usuarios():
-    from static.get_db_data import get_db_users
-    users = get_db_users()
-    return render_template("/admin/usuarios.html", data=users)
+    if current_user.is_admin:
+        from static.get_db_data import get_db_users
+        user = get_db_users()
+        return render_template("/admin/usuarios.html", data=user)
 
 
 @app.route('/admin/delete_usuario/<string:id>')
@@ -474,6 +483,21 @@ def delete_usuario(id):
         cur.close()
         flash("Artista eliminado exitosamente")
         return redirect('/admin/usuarios')
+
+
+@app.route('/categoria/albums')
+def canciones():
+    cur = connection.cursor()
+    cur.execute("SELECT * FROM ALBUMS")
+    alb = cur.fetchall()
+    cur.close()
+
+    cur = connection.cursor()
+    cur.execute("SELECT * FROM ARTISTAS")
+    art = cur.fetchall()
+    cur.close()
+
+    return render_template("cat_albums.html", alb=alb, art=art, base64=base64)
 
 
 if __name__ == '__main__':

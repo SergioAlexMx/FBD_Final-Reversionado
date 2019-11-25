@@ -1,6 +1,9 @@
-{% extends "/admin/layout_admin.html" %}
+{% extends "admin/layout_admin.html" %}
 {% set active_page = "artistas" %}
+
 {% block content %}
+    <link rel="stylesheet" href="/static/css/Tabla.css">
+
     <main role="main" class="col-md-9 ml-sm-auto col-lg-10 pt-3 px-4">
         {% from "macro.html" import render_field %}
         <div class="jumbotron">
@@ -34,7 +37,7 @@
                     <tr>
                         <th scope="row">{{ g.0 }}</th>
                         <td>{{ g.1 }}</td>
-                        <td>{{ g.2 }}</td>
+                        <td>{{ g.3 }}</td>
                         <td>
                             <a class="btn btn-warning" href="/admin/edit_artista/{{ g.0 }}" role="button">Editar</a>
                             <a class="btn btn-danger" href="/admin/delete_artista/{{ g.0 }}" role="button">Eliminar</a>

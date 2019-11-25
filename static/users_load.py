@@ -1,5 +1,6 @@
-from models import User
 import cx_Oracle
+
+from models import User
 
 #
 # Este es un script que se encargará de acceder a la base de datos, leer los datos de la base y

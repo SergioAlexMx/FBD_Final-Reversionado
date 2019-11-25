@@ -1,24 +1,24 @@
 {% extends "/admin/layout_admin.html" %}
 {% block content %}
-<main role="main" class="col-md-9 ml-sm-auto col-lg-10 pt-3 px-4">
-    {% from "macro.html" import render_field %}
-    <div class="jumbotron">
-        <h1 class="display-4">Agregar genero</h1>
-        <p class="lead">Ingrese la inforacion correspondiente en los siguientes campos</p>
-        {% with messages = get_flashed_messages() %}
-            {% if messages %}
-                {% for message in messages %}
-                    <div class="alert alert-primary" role="alert">{{ message }}</div>
-                {% endfor %}
+    <main role="main" class="col-md-9 ml-sm-auto col-lg-10 pt-3 px-4">
+        {% from "macro.html" import render_field %}
+        <div class="jumbotron">
+            <h1 class="display-4">Agregar genero</h1>
+            <p class="lead">Ingrese la inforacion correspondiente en los siguientes campos</p>
+            {% with messages = get_flashed_messages() %}
+                {% if messages %}
+                    {% for message in messages %}
+                        <div class="alert alert-primary" role="alert">{{ message }}</div>
+                    {% endfor %}
 
-            {% endif %}
-        {% endwith %}
+                {% endif %}
+            {% endwith %}
 
-        <form method="POST" enctype="multipart/form-data">
-            {{ render_field(form.hidden_tag) }}
-            {{ render_field(form.genre, class="form-control", value=gen.1) }}
-            {{ render_field(form.submit, class="btn btn-primary") }}
-        </form>
-    </div>
-</main>
+            <form method="POST" enctype="multipart/form-data">
+                {{ render_field(form.hidden_tag) }}
+                {{ render_field(form.genre, class="form-control", value=gen.1) }}
+                {{ render_field(form.submit, class="btn btn-primary") }}
+            </form>
+        </div>
+    </main>
 {% endblock %}
