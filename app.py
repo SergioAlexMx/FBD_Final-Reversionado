@@ -532,12 +532,28 @@ def cat_artistas():
     art = cur.fetchall()
     cur.close()
 
-
     return render_template("cat_artista.html", art=art, base64=base64)
 
-@app.route('/view/arista/<string:id>')
-def view_artista():
-    return "g"
+
+@app.route('/artista/<string:id>')
+def view_artista(id):
+    try:
+        cur = connection.cursor()
+        cur.execute("SELECT * FROM ARTISTAS WHERE ARTISTAS.ID_ARTISTA = :id", id=id)
+        art = cur.fetchall()[0]
+        cur.close()
+        try:
+            cur = connection.cursor()
+            cur.execute("SELECT * FROM ALBUMS where ID_ARTISTA = :id", id=id)
+            alb = cur.fetchall()
+            cur.close()
+            cantidadAlb = len(alb)
+            return render_template("vista_artistas.html", art=art, base64=base64, alb=alb, cantidadAlb=cantidadAlb)
+        except IndexError as e:
+            return render_template("error.html", error_message="Hubo un error interno")
+
+    except IndexError as e:
+        return render_template("error.html", error_message="No se encontro el artista")
 
 
 if __name__ == '__main__':
