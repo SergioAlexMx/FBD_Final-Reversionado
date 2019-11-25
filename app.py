@@ -556,5 +556,15 @@ def view_artista(id):
         return render_template("error.html", error_message="No se encontro el artista")
 
 
+@app.route('/add_to_car/cancion/<string:id>')
+def add_to_car_cancion(id):
+    pass
+
+
+@app.route('/add_to_car/album/<string:id>')
+def add_to_car_album(id):
+    pass
+
+
 if __name__ == '__main__':
     app.run()
