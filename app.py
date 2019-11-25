@@ -513,7 +513,7 @@ def vista_album(id):
     cur.close()
 
     cur = connection.cursor()
-    cur.execute("SELECT NOMBRE FROM CANCIONES WHERE ID_ALBUM=:id", id=id)
+    cur.execute("SELECT NOMBRE, ID_CANCION FROM CANCIONES WHERE ID_ALBUM=:id", id=id)
     can = cur.fetchall()
     cur.close()
 
