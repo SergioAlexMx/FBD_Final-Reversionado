@@ -1,0 +1,39 @@
+{% extends "layout_user.html" %}
+{% set active_page = "albums" %}
+{% block content %}
+    <br>
+    <br>
+    <div class="container">
+        <div class="row">
+            <div class="col-md-4">
+                <img src="data:;base64,{{ base64.b64encode(alb.3.read()).decode("utf-8") }}" class="img-fluid"
+                     alt="Responsive image" style="width:100%"/>
+            </div>
+            <div class="col-md-4">
+                <h1>{{ alb.2 }}</h1>
+                <hr>
+                <h4>Artista: {{ art.0 }}</h4>
+                <table class="table table-striped">
+                    <thead class="thead-dark">
+                    <tr>
+                        <th scope="col">#</th>
+                        <th scope="col">Nombre</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for c in can %}
+                        <tr>
+                            <th scope="row">{{ loop.index }}</th>
+                            <td>{{ c.0 }}</td>
+
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+
+        </div>
+    </div>
+
+
+{% endblock %}

@@ -1,0 +1,36 @@
+{% extends "layout_user.html" %}
+{% set active_page="artista" %}
+{% block content %}
+    <br>
+    <br>
+    <div class="container">
+        <div class="row">
+            {% for al in art %}
+                <div class="col-sm-4">
+                    <div class="panel panel-primary">
+                        <div class="panel-heading">{{ al.1 }}
+                            <div class="btn-group pull-right">
+                            </div>
+                        </div>
+                        <div class="panel-body"><img
+                                src="data:;base64,{{ base64.b64encode(al.2.read()).decode("utf-8") }}" class="img-fluid"
+                                alt="Responsive image" style="width:100%"/></div>
+                        <div class="panel-footer"> -
+                            <div class="btn-group pull-right"><a href="/album/{{ al.0 }}">Ver album</a></div>
+                        </div>
+
+                    </div>
+                </div>
+            {% endfor %}
+
+        </div>
+        <br><br>
+
+        <footer class="container-fluid text-center">
+            <p>Online Store Copyright</p>
+            <form class="form-inline">Get deals:
+                <input type="email" class="form-control" size="50" placeholder="Email Address">
+                <button type="button" class="btn btn-danger">Sign Up</button>
+            </form>
+        </footer>
+{% endblock %}

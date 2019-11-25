@@ -45,12 +45,20 @@
             </button>
             <a class="navbar-brand" href="#">Music Hunter ♫ - Shop</a>
         </div>
+        {% set nav_bar = [
+        ('/', 'index', 'Inicio'),
+        ('/categoria/albums', 'albums', 'Albums'),
+        ('/artistas', 'artista', 'Artistas')
+        ] %}
+        {% set active_page = active_page|default('index') -%}
+
         <div class="collapse navbar-collapse" id="myNavbar">
             <ul class="nav navbar-nav">
-                <li class="active"><a href="#">Home</a></li>
-                <li><a href="#">About</a></li>
-                <li><a href="#">Projects</a></li>
-                <li><a href="#">Contact</a></li>
+                {% for href, id, tag in nav_bar %}
+
+                    <li {% if id == active_page %} class="active" {% endif %}><a href="{{ href }}">{{ tag }}</a></li>
+
+                {% endfor %}
             </ul>
             <ul class="nav navbar-nav navbar-right">
                 <li><a href="#"><span class="glyphicon glyphicon-log-in"></span> Login</a></li>

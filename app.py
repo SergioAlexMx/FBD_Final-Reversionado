@@ -500,5 +500,45 @@ def canciones():
     return render_template("cat_albums.html", alb=alb, art=art, base64=base64)
 
 
+@app.route('/album/<string:id>')
+def vista_album(id):
+    cur = connection.cursor()
+    cur.execute("SELECT * FROM ALBUMS WHERE ID_ALBUM=:id", id=id)
+    alb = cur.fetchall()[0]
+    cur.close()
+
+    cur = connection.cursor()
+    cur.execute("SELECT NOMBRE FROM ARTISTAS WHERE ID_ARTISTA=:id", id=alb[1])
+    art = cur.fetchall()[0]
+    cur.close()
+
+    cur = connection.cursor()
+    cur.execute("SELECT NOMBRE FROM CANCIONES WHERE ID_ALBUM=:id", id=id)
+    can = cur.fetchall()
+    cur.close()
+
+    if len(alb) > 0:
+        return render_template("vista_album.html", alb=alb, base64=base64, art=art, can=can)
+    else:
+        render_template("error.html", error_messsage="No se encontró el album")
+
+    return "err"
+
+
+@app.route('/artistas')
+def cat_artistas():
+    cur = connection.cursor()
+    cur.execute("SELECT * FROM ARTISTAS")
+    art = cur.fetchall()
+    cur.close()
+
+
+    return render_template("cat_artista.html", art=art, base64=base64)
+
+@app.route('/view/arista/<string:id>')
+def view_artista():
+    return "g"
+
+
 if __name__ == '__main__':
     app.run()

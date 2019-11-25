@@ -1,4 +1,6 @@
 {% extends "layout_user.html" %}
+{% set active_page = "albums" %}
+
 {% block content %}
     <br>
     <br>
@@ -7,14 +9,24 @@
             {% for al in alb %}
                 <div class="col-sm-4">
                     <div class="panel panel-primary">
-                        <div class="panel-heading">{{ al.2 }}</div>
+                        <div class="panel-heading">{{ al.2 }}
+                            <div class="btn-group pull-right">
+                                <a href="/add_to_car/album/{{ al.0 }}" class="btn btn-success">Añadir al carrito</a>
+                            </div>
+                        </div>
                         <div class="panel-body"><img
                                 src="data:;base64,{{ base64.b64encode(al.3.read()).decode("utf-8") }}" class="img-fluid"
                                 alt="Responsive image" style="width:100%"/></div>
+
                         {% for ar in art %}
                             {% if al.1 == ar.0 %}
-                                <div class="panel-footer">Artista : {{ ar.1 }} |  precio: {{ al.4 }}</div>
+                                <div class="panel-footer">Artista : {{ ar.1 }} | precio: {{ al.4 }}
+                                    <div class="btn-group pull-right">
+                                        <a href="/album/{{ al.0 }}">Ver album</a>
+                                    </div>
+                                </div>
                             {% endif %}
+
                         {% endfor %}
                     </div>
                 </div>
